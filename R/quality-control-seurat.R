@@ -16,7 +16,7 @@
 
 qc_seurat <- function(input) {
    seurat_obj <- readRDS(input)
-   seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-")
+   seurat_obj[["percent.mt"]] <- Seurat::PercentageFeatureSet(seurat_obj, pattern = "^MT-")
    seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
    saveRDS(seurat_obj, file = "afterQC_seurat.rds")
 }
