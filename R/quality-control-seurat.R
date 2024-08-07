@@ -23,33 +23,33 @@ qc_seurat <- function(input) {
 
 normalization_seurat <- function(input) {
    seurat_obj <- readRDS(input)
-   seurat_obj <- NormalizeData(seurat_obj, normalization.method = "logNormalize", scale.factor = 10000)
+   seurat_obj <- Seurat::NormalizeData(seurat_obj, scale.factor = 10000)
    saveRDS(seurat_obj, file = "afternormalization.rds")
 }
 
 # this should take in as input the seurat object before QC and normalization
 visual_qcmetrices <- function(input){
    seurat_obj <- readRDS(input)
-   seurat_obj[["percent.mt"]] <- PercentageFeatureSet(obj, pattern = "^MT-")
+   seurat_obj[["percent.mt"]] <- Seurat::PercentageFeatureSet(seurat_obj, pattern = "^MT-")
    
-vplot <- Seurat::VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3) + NoLegend() %>%
-   FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+vplot <- Seurat::VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3) + ggplot2::theme(legend.position = "none") 
+   Seurat::FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
    
-   ggplot2::ggsave(file = "violin_plot.png")
+   ggplot2::ggsave(vplot, file = "violin_plot.png")
    
    # to visualzie separate features
-   vplot1 <- Seurat::VlnPlot(seurat_obj, features = "nFeature_RNA") + NoLegend()
-   vplot2 <- Seurat::VlnPlot(seurat_obj, features = "nCount_RNA") + NoLegend()
-   vplot1 <- Seurat::VlnPlot(seurat_obj, features = "percent.mt") + NoLegend()
+   vplot1 <- Seurat::VlnPlot(seurat_obj, features = "nFeature_RNA") + ggplot2::theme(legend.position = "none")
+   vplot2 <- Seurat::VlnPlot(seurat_obj, features = "nCount_RNA") + ggplot2::theme(legend.position = "none")
+   vplot3 <- Seurat::VlnPlot(seurat_obj, features = "percent.mt") + ggplot2::theme(legend.position = "none")
    
-   ggvplot1 <- ggplotly(vplot1)
-   ggvplot2 <- ggplotly(vplot2)
-   ggvplot3 <- ggplotly(vplot3)
+   ggvplot1 <- plotly::ggplotly(vplot1)
+   ggvplot2 <- plotly::ggplotly(vplot2)
+   ggvplot3 <- plotly::ggplotly(vplot3)
    
-annotations = list(list(x = 0.15, y = 1, text = "nFeature_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.5, y = 1, text = "nCount_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.85, y = 1, text = "percent.mt", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+   annotations <- list(list(x = 0.15, y = 1, text = "nFeature_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.5, y = 1, text = "nCount_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.85, y = 1, text = "percent.mt", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+   
+three <- plotly::subplot(ggvplot1, ggvplot2, ggvplot3) %>%
+   plotly::layout(title = "Violin Plots", annotations = annotations)
 
-three_plots <- subplot(ggvplot1, ggvplot2, ggvplot3) %>%
-   layout(title = "Violin Plots", annotations = annotations)
-
-ggplot2::ggsave(three_plots, file = "violin_plot.png")
+ggplot2::ggsave(file = "three_violin_plots.png")
 }
