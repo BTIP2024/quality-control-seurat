@@ -1,4 +1,4 @@
-Package: quality-control-seurat
+Package: qualitycontrolseurat
 Type: Package
 Title: Quality control and filtering of a Seurat object
 Version: 0.0.1.0
