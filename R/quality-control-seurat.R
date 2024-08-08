@@ -29,7 +29,7 @@ normalization_seurat <- function(input) {
 
 # this should take in as input the seurat object before QC and normalization
 visual_qcmetrices <- function(input){
-   seurat_obj <- readRDS(input)
+   seurat_obj <- readRDS("seurat_object.rds")
    seurat_obj[["percent.mt"]] <- Seurat::PercentageFeatureSet(seurat_obj, pattern = "^MT-")
    
    vplot <- Seurat::VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3) + ggplot2::theme(legend.position = "none") 
@@ -37,19 +37,21 @@ visual_qcmetrices <- function(input){
    
    ggplot2::ggsave(vplot, file = "violin_plot.png", width = 15)
    
-   # to visualzie separate features
    vplot1 <- Seurat::VlnPlot(seurat_obj, features = "nFeature_RNA") + ggplot2::theme(legend.position = "none")
    vplot2 <- Seurat::VlnPlot(seurat_obj, features = "nCount_RNA") + ggplot2::theme(legend.position = "none")
    vplot3 <- Seurat::VlnPlot(seurat_obj, features = "percent.mt") + ggplot2::theme(legend.position = "none")
    
+   library(plotly)
    
-   # annotations = list(list(x = 0.15, y = 1, text = "nFeature_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.5, y = 1, text = "nCount_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.85, y = 1, text = "percent.mt", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+   ggvplot1 <- ggplotly(vplot1)
+   ggvplot2 <- ggplotly(vplot2)
+   ggvplot3 <- ggplotly(vplot3)
    
-# not working
-   # plotly::subplot(ggvplot1, ggvplot2, ggvplot3) %>%
-     # layout(title = "Violin Plots", annotations = annotations)
-
-   # complete <- vplot1 + vplot2 + vplot3
-   complete <- gridExtra::grid.arrange(vplot1, vplot2, vplot3, nrow = 1)
-   ggplot2::ggsave(complete, file = "three_violin_plots.png", width = 15, height = 8) 
+   annotations = list(list(x = 0.15, y = 1, text = "nFeature_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.5, y = 1, text = "nCount_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.85, y = 1, text = "percent.mt", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+   
+   threeplots <- plotly::subplot(ggvplot1, ggvplot2, ggvplot3)
+   threeplots %>% plotly::layout(title = "Violin Plots", annotations = annotations)
+   
+   htmltools::save_html(threeplots, file = "features_plots.html")
+   
 }
