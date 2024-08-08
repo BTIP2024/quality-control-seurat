@@ -47,7 +47,37 @@ visual_qcmetrices <- function(input){
    ggvplot2 <- ggplotly(vplot2)
    ggvplot3 <- ggplotly(vplot3)
    
-   annotations = list(list(x = 0.15, y = 1, text = "nFeature_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.5, y = 1, text = "nCount_RNA", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE), list(x = 0.85, y = 1, text = "percent.mt", xref = "paper", yref = "paper", xanchor = "center", yanchor = "bottom", showarrow = FALSE))
+   annotations = list(
+      list(
+         x = 0.15, 
+         y = 1, 
+         text = "nFeature_RNA", 
+         xref = "paper", 
+         yref = "paper", 
+         xanchor = "center", 
+         yanchor = "bottom", 
+         showarrow = FALSE
+      ), 
+      list(
+         x = 0.5, 
+         y = 1, 
+         text = "nCount_RNA", 
+         xref = "paper", 
+         yref = "paper", 
+         xanchor = "center", 
+         yanchor = "bottom", 
+         showarrow = FALSE
+      ), 
+      list(
+         x = 0.85, 
+         y = 1, 
+         text = "percent.mt", 
+         xref = "paper", 
+         yref = "paper", 
+         xanchor = "center", 
+         yanchor = "bottom", 
+         showarrow = FALSE
+      ))
    
    threeplots <- plotly::subplot(ggvplot1, ggvplot2, ggvplot3)
    threeplots %>% plotly::layout(title = "Violin Plots", annotations = annotations)
