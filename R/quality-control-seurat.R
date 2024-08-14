@@ -24,7 +24,7 @@ qc_seurat <- function(input) {
 normalization_seurat <- function(input) {
    seurat_obj <- readRDS(input)
    seurat_obj <- Seurat::NormalizeData(seurat_obj, scale.factor = 10000)
-   saveRDS(seurat_obj, file = "afternormalization.rds")
+   saveRDS(seurat_obj, file = "normalized_seurat.rds")
 }
 
 # this should take in as input the seurat object before QC and normalization
