@@ -1,5 +1,5 @@
 # quality-control-seurat
-This package contains two functions a) qc_seurat and b) normalization_seurat.
+This package contains two functions a) `qc_seurat()` and b) `normalization_seurat()`.
 
 The first function performs quality control on a Seurat object generated from scRNAseq files. This removes cells with a low number of unique genes that imply dying or low-quality cells, cells or likely doublets/multiplets with high gene count, and cells with a high percentage of mitochondrial genes which imply they are dying cells.
 
