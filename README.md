@@ -12,7 +12,7 @@ devtools::install_github("BTIP/quality-control-seurat")
 ```
 
 ## Example
-The output of this function would be an rds file which when loaded in R would be a Seurat object.
+The output of this function would be an rds file which when loaded in R would be a Seurat object. Additional plots will be produced from the quality control step/function.
 ```
 # to perform qc
 qc_seurat("seurat_object.rds")
